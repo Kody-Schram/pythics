@@ -1,5 +1,6 @@
-from .vector import Vector
-from .funcs import clamp
+from typing import overload
+from pythics.utils.vector import Vector
+from pythics.utils.funcs import clamp
 import math
 
 # Basic rect or square collider
@@ -65,18 +66,18 @@ class CircleCollider:
            
            Determines if the current object(CircleCollider) collides with the given point(Vector)"""
 
-        distance = self.position.sub(point)
+        distance = self.position - point
 
         angle = math.atan2(distance.y, distance.x)
         x = math.cos(angle) * self.radius
         y = math.sin(angle) * self.radius
         closest = Vector(self.position.x - x, self.position.y - y)
 
-        return (distance.magnitude <= self.radius, point.sub(closest), closest)
+        return (distance.magnitude <= self.radius, point - closest)
 
     # Returns bool for a collision and a Vector for the rebound if there was a hit
     def collide_circle(self, other: 'CircleCollider'):
-        distance = other.position.sub(self.position)
+        distance = other.position - self.position
         collide = False
 
         if distance.magnitude - other.radius <= self.radius:
@@ -93,18 +94,19 @@ class CircleCollider:
         y = math.sin(angle) * other.radius
         p2 = Vector(other.position.x - x, other.position.y - y)
 
-        return (collide, p2.sub(p1))
+        return (collide, p2 - p1)
 
 
     def collide_rect(self, other: BoxCollider):
         closest = Vector(clamp(self.position.x, other.x, other.x + other.width), clamp(self.position.y, other.y, other.y + other.y))
-        collide = self.collide_point(closest)[0]
+        collide = False
 
-        direction = closest.sub(self.position)
-        angle = math.atan2(direction.y, direction.x)
-        x = math.cos(angle) * self.radius
-        y = math.sin(angle) * self.radius
+        distance = closest - self.position
+        if distance.magnitude <= self.radius:
+            collide = True
 
-        p = Vector(self.x - x, self.y - y)
+        overlap = distance.magnitude - self.radius
+        displacement = distance.normalize() * overlap
 
-        return (collide, closest.sub(p))
+        return (collide, displacement)
+
