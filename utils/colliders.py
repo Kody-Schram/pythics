@@ -2,6 +2,7 @@ from .vector import Vector
 from .funcs import clamp
 import math
 
+# Basic rect or square collider
 class BoxCollider:
     def __init__(self, x, y, width, height) -> None:
         self.x = x
@@ -9,6 +10,7 @@ class BoxCollider:
         self.width = width
         self.height = height
 
+    # Quality of life functions
     @property
     def position(self) -> Vector:
         return Vector(self.x, self.y)
@@ -18,10 +20,21 @@ class BoxCollider:
         return (self.position.x, self.position.y, self.width, self.height)
 
 
+    # Collision detection functions
     def collide_point(self, point: Vector) -> bool:
+        """Returns -> (bool, Vector)
+           Bool value is whether or not they collide
+           Vector returned is the displacement vector
+           
+           Determines if the current object(BoxCollider) collides with a point(Vector)"""
         return (self.x <= point.x and self.x + self.width >= point.x) and (self.y <= point.y and self.y + self.height >= point.y)
 
     def collide_rect(self, rect):
+        """Returns -> (bool, Vector)
+           Bool value is whether or not they collide
+           Vector returned is the displacement vector
+           
+           Determines if the current object(BoxCollider) collides with a given collider(BoxCollider)"""
         collide = False
 
         if (self.x <= rect.x + rect.width and self.x + self.width >= rect.x) and (self.y <= rect.y + rect.height and self.y + self.height >= rect.y):
@@ -34,17 +47,24 @@ class CircleCollider:
         self.y = y
         self.radius = radius
 
+    # Quality of life functions
     @property
     def position(self) -> Vector:
         return Vector(self.x, self.y)
-
     
     @property
     def as_tup(self):
         return (self.x, self.y, self.width, self.height)
 
-    # Returns bool for hit and rebound off point
+
+    # Collision detection functions
     def collide_point(self, point: Vector):
+        """Returns -> (bool, Vector)
+           Bool value is whether or not they collide
+           Vector returned is the displacement Vector
+           
+           Determines if the current object(CircleCollider) collides with the given point(Vector)"""
+
         distance = self.position.sub(point)
 
         angle = math.atan2(distance.y, distance.x)
