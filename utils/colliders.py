@@ -19,12 +19,6 @@ class BoxCollider:
             except AttributeError as e:
                 raise NoEngine(f'\n \n {self} could not find a Physics instance. To create a collider without using the Physic Engine, enter (no_engine=True) when creating a Collider.\n')
 
-        if trigger and not no_engine:
-            try:
-                Physics.instance.add_trigger(self)
-            except AttributeError as e:
-                raise NoEngine(f'\n \n {self} could not find a Physics instance. To create a trigger without using the Physic Engine, enter (no_engine=True) when creating a trigger.\n')
-
 
 
     # Quality of life functions
@@ -35,6 +29,7 @@ class BoxCollider:
     @property
     def as_tup(self):
         return (self.position.x, self.position.y, self.width, self.height)
+
 
 
     # Collision detection functions
@@ -70,11 +65,6 @@ class CircleCollider:
             except AttributeError as e:
                 raise NoEngine(f'\n \n {self} could not find a Physics instance. To create a collider without using the Physic Engine, enter (no_engine=True) when creating a Collider.\n')
 
-        if trigger and not no_engine:
-            try:
-                Physics.instance.add_trigger(self)
-            except AttributeError as e:
-                raise NoEngine(f'\n \n {self} could not find a Physics instance. To create a trigger without using the Physic Engine, enter (no_engine=True) when creating a trigger.\n')
 
 
     # Quality of life functions
@@ -85,6 +75,7 @@ class CircleCollider:
     @property
     def as_tup(self):
         return (self.x, self.y, self.width, self.height)
+
 
 
     # Collision detection functions

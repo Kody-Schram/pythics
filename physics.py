@@ -20,17 +20,19 @@ class Physics:
         if Physics.instance == None:
             Physics.instance = self
     
-    def add_collider(self, obj):
+    def add_collider(self, collider):
         """The user does NOT have to call this function.
         It will be called when creating a new BoxCollider or CircleCollider object
         """
         
-        chunk = funcs.determine_chunk(obj.x, obj.y, self.chunk_size)
+        chunk = funcs.determine_chunk(collider.x, collider.y, self.chunk_size)
         try:
-            self.chunks[chunk].append(obj)
+            self.chunks[chunk].append(collider)
 
         except KeyError as e:
-            self.chunks[chunk] = [obj]
+            self.chunks[chunk] = [collider]
+
+
 
 
 
