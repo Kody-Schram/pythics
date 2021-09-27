@@ -1,5 +1,4 @@
 from .vector import Vector
-from .physics import deltaTime
 
 class RigidBody:
     def __init__(self, x, y, gravity, drag, velocity) -> None:
