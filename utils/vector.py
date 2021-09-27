@@ -18,6 +18,10 @@ class Vector:
     def right() -> 'Vector':
         return Vector(1, 0)
 
+    @property
+    def zero() -> 'Vector':
+        return Vector(0, 0)
+
     # Initializing function
     def __init__(self, x: int, y: int) -> None:
         self.x: int = x
@@ -45,11 +49,11 @@ class Vector:
         return self.x * other.x + self.y * other.y
 
     # Operations
-    def sub(self, other: 'Vector') -> 'Vector':
+    def __sub__(self, other: 'Vector') -> 'Vector':
         return Vector(self.x - other.x, self.y - other.y)
 
-    def add(self, other: 'Vector') -> 'Vector':
+    def __add__(self, other: 'Vector') -> 'Vector':
         return Vector(self.x + other.x, self.y + other.y)
 
-    def scale(self, scalar: int) -> 'Vector':
+    def __mul__(self, scalar: int) -> 'Vector':
         return Vector(self.x * scalar, self.y * scalar)
