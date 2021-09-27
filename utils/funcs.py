@@ -10,3 +10,8 @@ def determine_chunk(x, y, chunk_size):
     aprox_y = round(y / chunk_size)
 
     return (aprox_x, aprox_y)
+
+
+def k2l(dict):
+    """Dictionary keys to list"""
+    return list(dict.keys())

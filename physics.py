@@ -4,6 +4,7 @@ import pythics.utils.vector as vector
 import pythics.utils.funcs as funcs
 
 import time
+import asyncio
 
 class Physics:
     instance = None
@@ -33,9 +34,11 @@ class Physics:
             self.chunks[chunk] = [collider]
 
 
-
-
-
-    async def run(self):
+    def run(self):
         while self.running:
-            pass
+            for chunk in funcs.k2l(self.chunks):
+                for collider1 in self.chunks[chunk]:
+                    for collider2 in self.chunks[chunk]:
+                        print(collider1, collider2)
+                        if collider1.collide(collider2):
+                            print('collided')

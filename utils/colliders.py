@@ -12,6 +12,7 @@ class BoxCollider:
         self.y = y
         self.width = width
         self.height = height
+        self.trigger = trigger
 
         if not no_engine or not trigger:
             try:
@@ -30,7 +31,14 @@ class BoxCollider:
     def as_tup(self):
         return (self.position.x, self.position.y, self.width, self.height)
 
+    
 
+    def collide(self, other):
+        if isinstance(other, BoxCollider):
+            return self.collide_rect(other)
+
+        elif isinstance(other, CircleCollider):
+            return self.collide_circle(other)
 
     # Collision detection functions
     def collide_point(self, point: Vector) -> bool:
@@ -52,12 +60,16 @@ class BoxCollider:
         if (self.x <= rect.x + rect.width and self.x + self.width >= rect.x) and (self.y <= rect.y + rect.height and self.y + self.height >= rect.y):
             collide = True
 
+    def collide_circle(self, circle):
+        return circle.collide_rect(self)
+
     
 class CircleCollider:
     def __init__(self, x, y, radius, no_engine=False, trigger=False) -> None:
         self.x = x
         self.y = y
         self.radius = radius
+        self.trigger = trigger
 
         if not no_engine:
             try:
@@ -77,6 +89,13 @@ class CircleCollider:
         return (self.x, self.y, self.width, self.height)
 
 
+
+    def collide(self, other):
+        if isinstance(other, CircleCollider):
+            return self.collide_circle(other)
+
+        elif isinstance(other, BoxCollider):
+            return self.collide_rect(other)
 
     # Collision detection functions
     def collide_point(self, point: Vector):
@@ -108,7 +127,7 @@ class CircleCollider:
         y = math.sin(angle) * self.radius
         p1 = Vector(self.position.x - x, self.position.y - y)
 
-        distance = self.position.sub(other.position)
+        distance = self.position - other.position
         angle = math.atan2(distance.y, distance.x)
         x = math.cos(angle) * other.radius
         y = math.sin(angle) * other.radius
