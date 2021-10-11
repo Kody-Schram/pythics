@@ -1,3 +1,5 @@
+from pythics.colliders import *
+
 # Clamping function
 def clamp(n, lo, hi):
     """Returns value if within range.
@@ -5,11 +7,15 @@ def clamp(n, lo, hi):
     return max(lo, min(n, hi))
 
 
-def determine_chunk(x, y, chunk_size):
-    aprox_x = round(x / chunk_size)
-    aprox_y = round(y / chunk_size)
+def determine_chunk(obj, chunk_size):
+    aprox_x = round(obj.x / chunk_size)
+    aprox_y = round(obj.y / chunk_size)
 
-    return (aprox_x, aprox_y)
+    chunks = [(aprox_x, aprox_y)]
+
+    # if isinstance(obj, BoxCollider):
+        
+    # return chunks
 
 
 def k2l(dict):
