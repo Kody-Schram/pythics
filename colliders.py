@@ -5,6 +5,8 @@ from pythics.utils.errors import NoEngine
 
 import math
 
+
+
 class Collider:
     def __init__(self, x, y, no_engine=False, trigger=False, relative=True, parent=None) -> None:
         self.x = x
@@ -25,12 +27,24 @@ class Collider:
 
 
     def displace(self, movement):
+        # Moves colliders position
         self.x += movement.x
         self.y += movement.y
 
-        if not self.parent == None and not self.relative:
+        # Only moves parent if it HAS a parent and IS relative to their position
+        if not self.parent == None and self.relative:
             self.parent.x += movement.x
             self.parent.y += movement.y
+
+
+            # Reseting gravity if it hits object
+            if not self.parent.gravity.x == 0:
+                self.parent.velocity.x = 0
+
+            if not self.parent.gravity.y == 0:
+                self.parent.velocity.y = 0
+
+
 
 
 # Basic rect or square collider
@@ -48,9 +62,15 @@ class BoxCollider (Collider):
     def position(self) -> Vector:
         return Vector(self.x, self.y)
 
+
     @property
     def as_tup(self):
         return (self.position.x, self.position.y, self.width, self.height)
+    
+
+    @property
+    def center(self):
+        return (self.x + (self.width / 2), self.y + (self.height / 2))
 
 
 
@@ -66,39 +86,49 @@ class BoxCollider (Collider):
     # Collision detection functions
     def collide_point(self, point: Vector) -> bool:
         """Returns -> (bool, Vector)
-           Bool value is whether or not they collide
-           Vector returned is the displacement vector
+           Bool: Collision occured
+           Vector: Displacement vector
            
            Determines if the current object(BoxCollider) collides with a point(Vector)"""
+
 
         return (self.x <= point.x and self.x + self.width >= point.x) and (self.y <= point.y and self.y + self.height >= point.y)
 
 
     def collide_rect(self, rect):
         """Returns -> (bool, Vector)
-           Bool value is whether or not they collide
-           Vector returned is the displacement vector
+           Bool: Collision occured
+           Vector: Displacement vector
            
            Determines if the current object(BoxCollider) collides with a given collider(BoxCollider)"""
+        
+
         collide = False
 
+        # Collision detection
         if (self.x <= rect.x + rect.width and self.x + self.width >= rect.x) and (self.y <= rect.y + rect.height and self.y + self.height >= rect.y):
             collide = True
 
-        closest = Vector(clamp(rect.x, self.x, self.x + self.width), clamp(rect.y, self.y, self.y + self.height))
-        closest2 = Vector(clamp(self.x, rect.x, rect.x + rect.width), clamp(self.y, rect.y, rect.y + rect.height))
 
-        print(closest, closest2)
+        # Displacement calculation
+        closest_s = Vector(clamp(rect.center[0], self.x, self.x + self.width), clamp(rect.center[1], self.y, self.y + self.height))
+        closest_o = Vector(clamp(self.center[0], rect.x, rect.x + rect.width), clamp(self.center[1], rect.y, rect.y + rect.height))
 
-        return (collide, closest - closest2)
+        displacement = closest_o - closest_s
+
+
+        return (collide, displacement)
 
 
     def collide_circle(self, circle):
         collision = circle.collide_rect(self)
         print('rect on circle', collision)
+
+
         return (collision[0], collision[1])
 
     
+
 
 class CircleCollider(Collider):
     def __init__(self, x, y, radius, no_engine=False, trigger=False, relative=True, parent=None) -> None:
@@ -139,8 +169,8 @@ class CircleCollider(Collider):
     # Collision detection functions
     def collide_point(self, point: Vector):
         """Returns -> (bool, Vector)
-           Bool value is whether or not they collide
-           Vector returned is the displacement Vector
+           Bool: Collision occured
+           Vector: Displacement vector
            
            Determines if the current object(CircleCollider) collides with the given point(Vector)"""
 

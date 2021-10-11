@@ -3,6 +3,7 @@ import pythics.vector as vector
 import pythics.utils.funcs as funcs
 
 import time
+import copy
 
 class Physics:
     instance = None
@@ -32,10 +33,13 @@ class Physics:
         # chunk = funcs.determine_chunk(collider.x, collider.y, self.chunk_size)
         chunk = (round(collider.x / self.chunk_size), round(collider.y / self.chunk_size))
         try:
-            self.chunks[chunk].append(collider)
+            self.chunks[chunk].add(collider)
 
         except KeyError as e:
-            self.chunks[chunk] = [collider]
+            self.chunks[chunk] = set()
+            self.chunks[chunk].add(collider)
+        
+        print(self.chunks)
 
     def add_object(self, object):
         self.object.append(object)
@@ -58,18 +62,18 @@ class Physics:
         for trigger in funcs.k2l(self.triggers):
             self.triggers[trigger] = False
 
+
         # Collision detection
         for chunk in funcs.k2l(self.chunks):
             for collider1 in self.chunks[chunk]:
-                for collider2 in self.chunks[chunk]:
-
-                    # print(collider1 in funcs.k2l(self.triggers), collider2 in funcs.k2l((self.triggers)))
+                temp = copy.copy(self.chunks[chunk])
+                temp.remove(collider1)
+                for collider2 in temp:
 
                     if not collider1.trigger and not collider2.trigger:
                         collision = collider1.collide(collider2)
                         if collision[0]:
                             collider1.displace(collision[1])
-                            print(collision)
                     
                     elif collider1.trigger:
                         self.triggers[collider1] = True
