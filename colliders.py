@@ -8,14 +8,17 @@ import math
 
 
 class Collider:
-    def __init__(self, x, y, no_engine=False, trigger=False, relative=True, parent=None) -> None:
+    def __init__(self, x, y, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True]) -> None:
         self.x = x
         self.y = y
 
         self.trigger = trigger
+        self.detects = set(detects)
+
         self.no_engine = no_engine
         self.relative = relative
         self.parent = parent
+        self.static = static
 
 
         if not no_engine or not trigger:
@@ -33,24 +36,18 @@ class Collider:
 
         # Only moves parent if it HAS a parent and IS relative to their position
         if not self.parent == None and self.relative:
-            self.parent.x += movement.x
-            self.parent.y += movement.y
+            self.parent.displace(movement)
+            
+            return
 
-
-            # Reseting gravity if it hits object
-            if not self.parent.gravity.x == 0:
-                self.parent.velocity.x = 0
-
-            if not self.parent.gravity.y == 0:
-                self.parent.velocity.y = 0
 
 
 
 
 # Basic rect or square collider
 class BoxCollider (Collider):
-    def __init__(self, x, y, width, height, no_engine=False, trigger=False, relative=True, parent=None) -> None:
-        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=parent)
+    def __init__(self, x, y, width, height, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True]) -> None:
+        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=parent, static=static, detects=detects)
         
         self.width = width
         self.height = height
@@ -131,8 +128,8 @@ class BoxCollider (Collider):
 
 
 class CircleCollider(Collider):
-    def __init__(self, x, y, radius, no_engine=False, trigger=False, relative=True, parent=None) -> None:
-        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=None)
+    def __init__(self, x, y, radius, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True]) -> None:
+        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=None, static=static, detects=detects)
         
         self.radius = radius
         self.trigger = trigger
