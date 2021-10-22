@@ -8,9 +8,18 @@ import math
 
 
 class Collider:
-    def __init__(self, x, y, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True]) -> None:
-        self.x = x
-        self.y = y
+    def __init__(self, x, y, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True], relpos=False) -> None:
+        try:
+            if relpos:
+                self.x = parent.x + x
+                self.y = parent.y + y
+                
+            else:
+                self.x = x
+                self.y = y
+        except AttributeError:
+            self.x = x
+            self.y = y
 
         self.trigger = trigger
         self.detects = set(detects)
@@ -46,8 +55,8 @@ class Collider:
 
 # Basic rect or square collider
 class BoxCollider (Collider):
-    def __init__(self, x, y, width, height, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True]) -> None:
-        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=parent, static=static, detects=detects)
+    def __init__(self, x, y, width, height, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True], relpos=False) -> None:
+        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=parent, static=static, detects=detects, relpos=relpos)
         
         self.width = width
         self.height = height
@@ -128,8 +137,8 @@ class BoxCollider (Collider):
 
 
 class CircleCollider(Collider):
-    def __init__(self, x, y, radius, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True]) -> None:
-        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=None, static=static, detects=detects)
+    def __init__(self, x, y, radius, no_engine=False, trigger=False, relative=True, parent=None, static=False, detects=[True], relpos=False) -> None:
+        super().__init__(x, y, no_engine=no_engine, trigger=trigger, relative=relative, parent=None, static=static, detects=detects, relpos=relpos)
         
         self.radius = radius
         self.trigger = trigger
