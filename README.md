@@ -7,3 +7,4 @@ Pythics is a simple 2D physics simulator developed alongside instruction in AP P
 * Positions &#8594; $meters$ 
 * Velocity &#8594; $\frac{meters}{second}$
 * Acceleration &#8594; $\frac{meters}{second^2}$
+* Forces &#8594; $Newtons$
