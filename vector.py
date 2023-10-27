@@ -34,7 +34,7 @@ class Vector:
         return (self.x, self.y)
 
     def __repr__(self) -> str:
-        return f'({self.x}, {self.y})'
+        return f'<{self.x}, {self.y}>'
 
     # Vector functions
     @property
@@ -55,5 +55,8 @@ class Vector:
     def __add__(self, other: 'Vector') -> 'Vector':
         return Vector(self.x + other.x, self.y + other.y)
 
-    def __mul__(self, scalar: int) -> 'Vector':
+    def __mul__(self, scalar: float) -> 'Vector':
         return Vector(self.x * scalar, self.y * scalar)
+
+    def __truediv__(self, scalar: float) -> 'Vector':
+        return Vector(self.x / scalar, self.y / scalar)
