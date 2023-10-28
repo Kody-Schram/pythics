@@ -23,7 +23,13 @@ class Vector:
         return Vector(0, 0)
 
     # Initializing function
-    def __init__(self, x: float, y: float) -> None:
+    def __init__(self, x: float = 0, y: float = 0) -> None:
+        if type(x) is tuple:
+            self.x: float = x[0]
+            self.y: float = x[1]
+
+            return
+
         self.x: float = x
         self.y: float = y
 
