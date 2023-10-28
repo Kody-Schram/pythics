@@ -1,22 +1,23 @@
 from pythics.vector import Vector
 
 class Object:
-    def __init__(self, position: Vector = Vector(0, 0), mass: int = 1, velocity: Vector = Vector(0, 0), acceleration: Vector = Vector(0, 0), normalForce: bool = False):
+    def __init__(self, position: Vector = Vector(0, 0), mass: int = 1, velocity: Vector = Vector(0, 0), acceleration: Vector = Vector(0, 0)):
         self.position: Vector = position
         self.mass: int = mass
         self.velocity: Vector = velocity
         self.acceleration: Vector = acceleration
-        self.normalForce = normalForce
+        self.total_force = Vector(0, 0)
 
     def addVelocity(self, velocity: Vector):
         self.velocity += velocity
 
-    def update(self, dt):
-        if not self.normalForce:
-            self.velocity += (self.acceleration * dt) + (Vector(0, 100) * dt)
-        else:
-            self.velocity += (self.acceleration * dt)
+    def applyForce(self, force: Vector):
+        self.total_force += force
 
-        print(f'velocity {self.velocity}')
+    def removeForce(self, force: Vector):
+        self.total_force -= force
+
+    def update(self, dt):
+        self.velocity += (self.acceleration * dt) + (self.total_force * dt)
 
         self.position += self.velocity * dt
