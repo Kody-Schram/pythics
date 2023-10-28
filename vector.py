@@ -4,11 +4,11 @@ class Vector:
     # Quick directional vectors
     @property
     def down() -> 'Vector':
-        return Vector(0, -1)
+        return Vector(0, 1)
 
     @property
     def up() -> 'Vector':
-        return Vector(0, 1)
+        return Vector(0, -1)
 
     @property
     def left() -> 'Vector':
@@ -23,9 +23,9 @@ class Vector:
         return Vector(0, 0)
 
     # Initializing function
-    def __init__(self, x: int, y: int) -> None:
-        self.x: int = x
-        self.y: int = y
+    def __init__(self, x: float, y: float) -> None:
+        self.x: float = x
+        self.y: float = y
 
 
     # Quality of life functions
@@ -59,4 +59,10 @@ class Vector:
         return Vector(self.x * scalar, self.y * scalar)
 
     def __truediv__(self, scalar: float) -> 'Vector':
+        return Vector(self.x / scalar, self.y / scalar)
+
+    def __mul__(self, scalar: int) -> 'Vector':
+        return Vector(self.x * scalar, self.y * scalar)
+
+    def __truediv__(self, scalar: int) -> 'Vector':
         return Vector(self.x / scalar, self.y / scalar)
