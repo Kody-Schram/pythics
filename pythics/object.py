@@ -1,4 +1,4 @@
-from .vector import Vector
+from pythics.vector import Vector
 
 class Object:
     def __init__(self, position: Vector = Vector(0, 0), mass: int = 1, velocity: Vector = Vector(0, 0), acceleration: Vector = Vector(0, 0), normalForce: bool = False):
