@@ -1,27 +1,6 @@
 import math
 
 class Vector:
-    # Quick directional vectors
-    @property
-    def down() -> 'Vector':
-        return Vector(0, 1)
-
-    @property
-    def up() -> 'Vector':
-        return Vector(0, -1)
-
-    @property
-    def left() -> 'Vector':
-        return Vector(-1, 0)
-
-    @property
-    def right() -> 'Vector':
-        return Vector(1, 0)
-
-    @property
-    def zero() -> 'Vector':
-        return Vector(0, 0)
-
     # Initializing function
     def __init__(self, x: float = 0, y: float = 0) -> None:
         if type(x) is tuple:
